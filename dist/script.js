@@ -5057,8 +5057,8 @@ window.addEventListener('DOMContentLoaded', function () {
     activeClass: 'feed__item-active'
   });
   feedSlider.init();
-  var player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay');
-  player.init();
+  new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay').init();
+  new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.module__video-item .play', '.overlay').init();
   new _modules_difference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item').init();
   new _modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"]('.form').init();
 });
@@ -5371,10 +5371,18 @@ function () {
         btn.addEventListener('click', function () {
           if (document.querySelector('iframe#frame')) {
             _this.overlay.style.display = 'flex';
-          } else {
-            var path = btn.getAttribute('data-url');
 
-            _this.createPlayer(path);
+            if (_this.path !== btn.getAttribute('data-url')) {
+              _this.path = btn.getAttribute('data-url');
+
+              _this.player.loadVideoById({
+                videoId: _this.path
+              });
+            }
+          } else {
+            _this.path = btn.getAttribute('data-url');
+
+            _this.createPlayer(_this.path);
           }
         });
       });
@@ -5403,12 +5411,14 @@ function () {
   }, {
     key: "init",
     value: function init() {
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      this.bindTriggers();
-      this.bindCloseBtn();
+      if (this.btns.length > 0) {
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        this.bindTriggers();
+        this.bindCloseBtn();
+      }
     }
   }]);
 
